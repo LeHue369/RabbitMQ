@@ -1,18 +1,19 @@
 package com.example.producer;
 
-import com.example.producer.service.RabbitMQService;
+import com.example.producer.entity.Employee;
+import com.example.producer.service.EmployeeJsonProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.time.LocalDate;
 
 @SpringBootApplication
-@EnableScheduling
 public class ProducerApplication implements CommandLineRunner {
 
-//	@Autowired
-//	private RabbitMQService rabbitMQService;
+	@Autowired
+	private EmployeeJsonProducer producer;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProducerApplication.class, args);
@@ -20,6 +21,9 @@ public class ProducerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		rabbitMQService.senMessage(" in here");
+		for(int i = 0; i < 5; i++){
+			var employee = new Employee("emp", "Employee " + i, LocalDate.now());
+			producer.sendMessage(employee);
+		}
 	}
 }
